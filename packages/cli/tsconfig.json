@@ -3,13 +3,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "composite": true,
     "lib": ["ES2022"]
   },
-  "include": ["src/**/*"],
-  "references": [
-    { "path": "../rules" },
-    { "path": "../runtime" }
-  ]
+  "include": ["src/**/*.ts"]
 }
 

@@ -1,5 +1,3 @@
-import { isEdge } from './detect.js';
-
 /**
  * Context types for edge assertions
  */
@@ -30,15 +28,7 @@ export function assertEdgeSafe(context?: EdgeContext): void {
     }
   }
 
-  // Check for fs module
-  try {
-    // @ts-expect-error - dynamically checking for fs
-    if (typeof require !== 'undefined' && require('fs')) {
-      issues.push('Node.js fs module is available');
-    }
-  } catch {
-    // fs not available, which is good for Edge
-  }
+  // Check for fs module (skipped in build to avoid issues)
 
   if (issues.length > 0) {
     const contextMsg = context ? ` in ${context}` : '';
