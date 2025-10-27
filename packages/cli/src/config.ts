@@ -37,8 +37,16 @@ export async function loadConfig(cwd: string = process.cwd()): Promise<Config | 
       } else {
         // Load JS/TS config (using dynamic import)
         const moduleUrl = pathToFileURL(configPath).href;
-        const module = await import(moduleUrl);
-        config = module.default || module;
+        try {
+          const module = await import(moduleUrl);
+          config = module.default || module;
+        } catch (importError) {
+          // Check if it's a "file not found" error
+          if ((importError as Error).message.includes('Cannot find module')) {
+            continue;
+          }
+          throw importError;
+        }
       }
 
       // Validate config
@@ -47,6 +55,10 @@ export async function loadConfig(cwd: string = process.cwd()): Promise<Config | 
     } catch (error) {
       // Config file doesn't exist or is invalid, try next one
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        continue;
+      }
+      // Check if it's a module not found error
+      if ((error as Error).message?.includes('Cannot find module')) {
         continue;
       }
       // If file exists but has parsing errors, throw
