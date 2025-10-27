@@ -1,8 +1,9 @@
 # Dependencies
 node_modules
 .pnpm-debug.log
-.pnpm-store
+.pnpm-store/
 pnpm-lock.yaml
+.pnpm/
 
 # Build outputs
 dist

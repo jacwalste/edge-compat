@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { Command } from 'commander';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'pathe';
