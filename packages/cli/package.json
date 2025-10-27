@@ -1,0 +1,64 @@
+{
+  "name": "edge-compat",
+  "version": "0.1.0",
+  "description": "CLI scanner for Edge Runtime compatibility issues in JavaScript/TypeScript projects",
+  "type": "module",
+  "bin": {
+    "edge-compat": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "edge-runtime",
+    "cli",
+    "scanner",
+    "vercel",
+    "cloudflare",
+    "next.js"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "lint": "echo 'TODO: Add biome or eslint'",
+    "format": "echo 'TODO: Add biome or prettier'"
+  },
+  "dependencies": {
+    "@edge-compat/rules": "workspace:*",
+    "@edge-compat/runtime": "workspace:*",
+    "commander": "^11.1.0",
+    "globby": "^14.0.0",
+    "ts-morph": "^21.0.1",
+    "esbuild": "^0.19.11",
+    "kolorist": "^1.8.0",
+    "ora": "^8.0.1",
+    "cli-table3": "^0.6.3",
+    "pathe": "^1.1.2",
+    "zod": "^3.22.4",
+    "jscodeshift": "^0.15.1"
+  },
+  "devDependencies": {
+    "@types/cli-table3": "^0.5.11",
+    "@types/node": "^20.11.5",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+

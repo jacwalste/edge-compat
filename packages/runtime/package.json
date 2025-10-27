@@ -1,0 +1,44 @@
+{
+  "name": "@edge-compat/runtime",
+  "version": "0.1.0",
+  "description": "Runtime helpers for Edge-safe JavaScript/TypeScript applications",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "edge-runtime",
+    "runtime",
+    "helpers"
+  ],
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "lint": "echo 'TODO: Add biome or eslint'",
+    "format": "echo 'TODO: Add biome or prettier'"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+

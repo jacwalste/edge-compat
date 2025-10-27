@@ -1,0 +1,52 @@
+{
+  "name": "edge-compat-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "CLI and runtime helpers for scanning JavaScript/TypeScript projects for Edge Runtime compatibility issues",
+  "type": "module",
+  "keywords": [
+    "edge-runtime",
+    "vercel",
+    "cloudflare",
+    "workers",
+    "next.js",
+    "compatibility",
+    "scanner",
+    "codemod"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Jack Stepanek"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jackstepanek/edge-compat.git"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' run build",
+    "dev": "pnpm -r --parallel --filter './packages/*' run dev",
+    "test": "pnpm -r run test",
+    "test:watch": "pnpm -r run test:watch",
+    "lint": "pnpm -r run lint",
+    "format": "pnpm -r run format",
+    "typecheck": "pnpm -r run typecheck",
+    "clean": "pnpm -r run clean && rm -rf node_modules",
+    "release": "pnpm build && changeset publish",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/node": "^20.11.5",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}
+

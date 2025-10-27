@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+.pnpm-debug.log
+pnpm-lock.yaml
+
+# Build outputs
+dist
+*.tsbuildinfo
+.turbo
+
+# Tests
+coverage
+.vitest
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Edge Compat outputs
+edge-compat-report.md
+.edge-compat
+
+# Misc
+.cache
+.tmp
+
