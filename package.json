@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jackstepanek/edge-compat.git"
+    "url": "https://github.com/jacwalste/edge-compat.git"
   },
   "scripts": {
     "build": "pnpm -r --filter './packages/*' run build",
