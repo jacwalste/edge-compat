@@ -1,0 +1,199 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+  build:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            packages/*/dist
+            !packages/*/node_modules
+          retention-days: 7
+
+  test:
+    name: Test (Node ${{ matrix.node-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20, 22]
+        os: [ubuntu-latest]
+        include:
+          - node-version: 20
+            os: macos-latest
+          - node-version: 20
+            os: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test
+
+  e2e-scan:
+    name: E2E Scanner Test
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build CLI
+        run: pnpm build
+
+      - name: Scan basic-ts example (expect findings)
+        run: |
+          pnpm --filter edge-compat exec edge-compat scan examples/basic-ts/src --format json > scan-results.json
+          # This should fail (exit 1) because there are issues
+          if [ $? -eq 0 ]; then
+            echo "ERROR: Expected scan to find issues but it didn't"
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: Verify scan found issues
+        run: |
+          if [ ! -f scan-results.json ]; then
+            echo "ERROR: Scan results file not created"
+            exit 1
+          fi
+          echo "Scan results:"
+          cat scan-results.json
+          # Check that findings array has items
+          findings_count=$(cat scan-results.json | grep -o '"findings"' | wc -l)
+          if [ $findings_count -eq 0 ]; then
+            echo "ERROR: No findings in scan results"
+            exit 1
+          fi
+          echo "✅ Scanner successfully detected compatibility issues"
+
+      - name: Upload scan results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scan-results
+          path: scan-results.json
+          retention-days: 7
+
+  all-checks-pass:
+    name: All Checks Passed
+    if: always()
+    needs:
+      - lint-and-typecheck
+      - build
+      - test
+      - e2e-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check all job statuses
+        run: |
+          if [[ "${{ needs.lint-and-typecheck.result }}" != "success" ]]; then
+            echo "Lint and typecheck failed"
+            exit 1
+          fi
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "Build failed"
+            exit 1
+          fi
+          if [[ "${{ needs.test.result }}" != "success" ]]; then
+            echo "Tests failed"
+            exit 1
+          fi
+          if [[ "${{ needs.e2e-scan.result }}" != "success" ]]; then
+            echo "E2E scan failed"
+            exit 1
+          fi
+          echo "✅ All checks passed!"
+
