@@ -1,6 +1,6 @@
 # edge-compat
 
-[![CI](https://github.com/jackstepanek/edge-compat/workflows/CI/badge.svg)](https://github.com/jackstepanek/edge-compat/actions)
+[![CI](https://github.com/jacwalste/edge-compat/workflows/CI/badge.svg)](https://github.com/jacwalste/edge-compat/actions)
 [![npm version](https://img.shields.io/npm/v/edge-compat.svg)](https://www.npmjs.com/package/edge-compat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
