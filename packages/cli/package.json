@@ -1,6 +1,6 @@
 {
   "name": "edge-compat",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CLI scanner for Edge Runtime compatibility issues in JavaScript/TypeScript projects",
   "type": "module",
   "bin": {
