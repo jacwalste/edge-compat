@@ -1,6 +1,5 @@
 # edge-compat
 
-[![CI](https://github.com/jacwalste/edge-compat/workflows/CI/badge.svg)](https://github.com/jacwalste/edge-compat/actions)
 [![npm version](https://img.shields.io/npm/v/edge-compat.svg)](https://www.npmjs.com/package/edge-compat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -256,31 +255,7 @@ This monorepo contains three packages:
 | [`@edge-compat/rules`](./packages/rules) | Rule engine and detection logic |
 | [`@edge-compat/runtime`](./packages/runtime) | Runtime helper utilities |
 
-## CI/CD Integration
-
-### GitHub Actions
-
-```yaml
-name: Edge Compatibility Check
-
-on: [push, pull_request]
-
-jobs:
-  edge-compat:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-      
-      - run: pnpm install
-      - run: npx edge-compat scan --format json --strict
-```
-
-### Exit Codes
+## Exit Codes
 
 - `0` - No issues detected
 - `1` - Issues found (non-strict mode)
