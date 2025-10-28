@@ -38,17 +38,17 @@
   "dependencies": {
     "commander": "^11.1.0",
     "globby": "^14.0.0",
-    "ts-morph": "^21.0.1",
-    "esbuild": "^0.19.11",
     "kolorist": "^1.8.0",
     "ora": "^8.0.1",
     "cli-table3": "^0.6.3",
     "pathe": "^1.1.2",
-    "zod": "^3.22.4",
-    "jscodeshift": "^0.15.1"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
+    "ts-morph": "^21.0.1",
+    "esbuild": "^0.19.11",
+    "jscodeshift": "^0.15.1",
     "tsup": "^8.0.1",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
