@@ -185,7 +185,7 @@ describe('myNewRule', () => {
 
 1. **Update your fork**:
    ```bash
-   git remote add upstream https://github.com/jackstepanek/edge-compat.git
+   git remote add upstream https://github.com/jacwalste/edge-compat.git
    git fetch upstream
    git rebase upstream/main
    ```
@@ -214,8 +214,8 @@ describe('myNewRule', () => {
 
 ## Questions?
 
-- Open an [issue](https://github.com/jackstepanek/edge-compat/issues)
-- Start a [discussion](https://github.com/jackstepanek/edge-compat/discussions)
+- Open an [issue](https://github.com/jacwalste/edge-compat/issues)
+- Start a [discussion](https://github.com/jackwalste/edge-compat/discussions)
 
 ## License
 

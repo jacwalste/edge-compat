@@ -79,7 +79,7 @@ const hash = await sha256('hello world');
 
 ## API Reference
 
-See the [documentation](https://github.com/jackstepanek/edge-compat) for full API reference.
+See the [documentation](https://github.com/jacwalste/edge-compat) for full API reference.
 
 ## License
 
