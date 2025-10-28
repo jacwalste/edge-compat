@@ -18,6 +18,23 @@ export async function scanCommand(
   paths: string[] = [],
   options: ScanCommandOptions = {},
 ): Promise<void> {
+  // Validate edgeTarget
+  if (options.edgeTarget && !['next', 'vercel', 'cloudflare', 'deno', 'auto'].includes(options.edgeTarget)) {
+    throw new Error(`Invalid edgeTarget: ${options.edgeTarget}. Must be one of: next, vercel, cloudflare, deno, auto`);
+  }
+
+  // Validate format
+  if (options.format && !['pretty', 'json', 'md'].includes(options.format)) {
+    throw new Error(`Invalid format: ${options.format}. Must be one of: pretty, json, md`);
+  }
+
+  // Validate paths input
+  for (const path of paths) {
+    if (typeof path !== 'string' || path.trim().length === 0) {
+      throw new Error('Invalid path provided - paths must be non-empty strings');
+    }
+  }
+
   const cwd = process.cwd();
   const spinner = ora('Loading configuration...').start();
 

@@ -76,6 +76,20 @@ export class Scanner {
   private async scanFile(filePath: string): Promise<Finding[]> {
     const findings: Finding[] = [];
 
+    // Security: Validate file path and size
+    const { validatePath, validateFile } = await import('./utils/validation');
+    const pathValidation = validatePath(filePath, this.options.cwd);
+    if (!pathValidation.valid) {
+      console.warn(`Skipping invalid path: ${filePath} - ${pathValidation.error}`);
+      return findings;
+    }
+
+    const fileValidation = await validateFile(pathValidation.sanitized!);
+    if (!fileValidation.valid) {
+      console.warn(`Skipping file: ${filePath} - ${fileValidation.error}`);
+      return findings;
+    }
+
     try {
       const fileContent = await readFile(filePath, 'utf-8');
 

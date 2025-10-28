@@ -1,6 +1,6 @@
 {
   "name": "@edge-compat/rules",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shareable rule definitions and detectors for edge-compat",
   "type": "module",
   "exports": {
