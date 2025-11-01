@@ -10,6 +10,7 @@ export default defineConfig({
   shims: true,
   splitting: false,
   treeshake: true,
+  external: ['ts-morph', 'esbuild', 'jscodeshift'],
   banner: {
     js: '#!/usr/bin/env node',
   },

@@ -1,6 +1,6 @@
 import { resolve } from 'pathe';
 import ora from 'ora';
-import { loadConfig } from '../config.js';
+import { loadConfig, loadConfigFromFile } from '../config.js';
 import { Scanner } from '../scanner.js';
 import { getReporter, type ReporterFormat } from '../reporters/index.js';
 import type { Config } from '@edge-compat/rules';
@@ -43,10 +43,10 @@ export async function scanCommand(
     let config: Config | null = null;
     
     if (options.config) {
-      const configPath = resolve(cwd, options.config);
+      // Security: Validate config file path to prevent path traversal
+      const configFilePath = resolve(cwd, options.config);
       spinner.text = `Loading config from ${options.config}...`;
-      // TODO: Load from specific path
-      config = await loadConfig(cwd);
+      config = await loadConfigFromFile(configFilePath, cwd);
     } else {
       config = await loadConfig(cwd);
     }
