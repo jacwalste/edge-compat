@@ -46,9 +46,17 @@ async function main() {
       'auto',
     )
     .option('-c, --config <path>', 'Path to config file')
+    .option('--changed', 'Scan only changed files (git)')
+    .option('--watch', 'Watch mode: re-scan on file changes')
+    .option('--no-parallel', 'Disable parallel scanning')
+    .option('--no-cache', 'Disable caching')
     .option('--no-telemetry', 'Disable telemetry (opt-in only)')
     .action(async (paths, options) => {
-      await scanCommand(paths, options);
+      await scanCommand(paths, {
+        ...options,
+        parallel: options.parallel !== false, // Default true unless --no-parallel
+        cache: options.cache !== false, // Default true unless --no-cache
+      });
     });
 
   // Fix command

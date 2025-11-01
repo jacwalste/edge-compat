@@ -63,6 +63,15 @@ export interface Finding {
 }
 
 /**
+ * AST context (optional, provided when AST parsing is available)
+ */
+export interface ASTContext {
+  sourceFile: any; // ts-morph SourceFile
+  filePath: string;
+  fileContent: string;
+}
+
+/**
  * Context passed to rule detectors
  */
 export interface RuleContext {
@@ -70,6 +79,7 @@ export interface RuleContext {
   fileContent: string;
   edgeTarget: EdgeTarget;
   strict: boolean;
+  ast?: ASTContext | null; // Optional AST context from ts-morph
 }
 
 /**

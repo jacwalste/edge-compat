@@ -5,6 +5,7 @@ import { Scanner } from '../scanner.js';
 import { getReporter, type ReporterFormat } from '../reporters/index.js';
 import type { Config } from '@edge-compat/rules';
 import { RuleSeverity, EdgeTarget } from '@edge-compat/rules';
+import { runWatchMode } from './watch.js';
 
 export interface ScanCommandOptions {
   format?: ReporterFormat;
@@ -12,6 +13,10 @@ export interface ScanCommandOptions {
   strict?: boolean;
   edgeTarget?: 'next' | 'vercel' | 'cloudflare' | 'deno' | 'auto';
   config?: string;
+  changed?: boolean; // Scan only changed files (git)
+  parallel?: boolean; // Enable parallel scanning
+  watch?: boolean; // Watch mode
+  cache?: boolean; // Enable caching
 }
 
 export async function scanCommand(
@@ -62,17 +67,45 @@ export async function scanCommand(
 
     spinner.succeed('Configuration loaded');
 
-    // Run scan
+    // Handle watch mode
+    if (options.watch) {
+      return runWatchMode({
+        cwd,
+        config: finalConfig,
+        paths: paths.length > 0 ? paths : undefined,
+        format: options.format || 'pretty',
+        output: options.output,
+      });
+    }
+
+    // Run scan with progress indicator
     spinner.start('Scanning files...');
     
+    let lastMessage = '';
     const scanner = new Scanner({
       cwd,
       config: finalConfig,
       paths: paths.length > 0 ? paths : undefined,
+      changed: options.changed,
+      parallel: options.parallel ?? true, // Default to parallel for better performance
+      cache: options.cache ?? true, // Default to enabled
+      progress: (progress) => {
+        const message = progress.message || `Scanning ${progress.current}/${progress.total} files...`;
+        if (message !== lastMessage) {
+          spinner.text = message;
+          lastMessage = message;
+        }
+      },
     });
 
     const result = await scanner.scan();
     spinner.stop();
+
+    if (result.cachedCount !== undefined) {
+      console.log(`\nScanned ${result.fileCount} files (cached: ${result.cachedCount}) in ${(result.duration / 1000).toFixed(2)}s`);
+    } else {
+      console.log(`\nScanned ${result.fileCount} files in ${(result.duration / 1000).toFixed(2)}s`);
+    }
 
     // Report results
     const format = options.format || 'pretty';

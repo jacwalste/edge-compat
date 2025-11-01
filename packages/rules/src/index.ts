@@ -6,6 +6,7 @@ export * from './registry.js';
 
 // Utils
 export * from './utils/codeframe.js';
+export * from './utils/ast.js';
 
 // Recipes
 export * from './recipes/replacements.js';
